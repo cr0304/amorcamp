@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+        body {
+            margin: 0;
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .header{
+            width: 100vw;
+            background-color: transparent;
+            text-align: center;
+
+        }
+        .navbar {
+            margin: auto;
+            width: 1100px;
+            display: flex;
+            /* 가로 정렬  */
+            justify-content: space-between;
+            /* 세로 정렬 */
+            align-items: center;
+            padding: 8px 12px;
+        }
+
+        .navbar__logo {
+            font-size: 24px;
+            color: white;
+        }
+        /* 추가 */
+
+        .logo_img{
+            width: 115px;
+            height: 80px;
+            margin: 5px 40px;
+        }
+        /*  */
+
+        .navbar__logo i {
+            color: #d49466;
+        }
+
+        .navbar__menu {
+            display: flex;
+            list-style: none;
+            /* 꾸밈세 없애기 */
+            padding-left: 0;
+        }
+
+        .navbar__menu li {
+            padding: 8px 12px;
+            margin: 0px 10px;
+        }
+
+        .navbar__menu li:hover {
+            background-color: #ca2027;
+            border-radius: 4px;
+        }
+
+        .navbar__icons {
+            list-style: none;
+            color: white;
+            display: flex;
+            padding-left: 0;
+        }
+
+        .navbar__icons li {
+            padding: 8px 12px;
+        }
+
+        .navbar__toogleBtn {
+            display: none;
+            position: absolute;
+            right: 32px;
+            font-size: 32px;
+            color: #d49466;
+        }
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 8px 24px;
+            }
+            .navbar__menu {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .navbar__menu li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar__icons {
+                display: none;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .navbar__toogleBtn {
+                display: block;
+            }
+
+           .navbar__menu.active,
+           .navbar__icons.active {
+               display: flex;
+           }
+        }
+
+        /*dropdown*/
+        .navbar .nav-item i {
+        	font-size: 18px;
+        }
+        .navbar .dropdown-item i {
+        	font-size: 16px;
+        	min-width: 22px;
+        }
+        .navbar .nav-item.open > a {
+        	background: none !important;
+        }
+        .navbar .dropdown-menu {
+        	border-radius: 1px;
+        	border-color: #e5e5e5;
+        	box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+        .navbar .dropdown-menu a {
+        	color: #777;
+        	padding: 8px 20px;
+        	line-height: normal;
+        }
+        .navbar .dropdown-menu a:hover, .navbar .dropdown-menu a:active {
+        	color: #333;
+        }
+        .navbar .dropdown-item .material-icons {
+        	font-size: 21px;
+        	line-height: 16px;
+        	vertical-align: middle;
+        	margin-top: -2px;
+        }
+
+        /* header - login button css*/
+        .login_btn{
+            background-color: transparent;
+            border: none;
+            border-radius: 3px;
+            color: #FFF;
+            padding: 5px 10px;
+            background-color: #e2131bd9;
+
+        }
+        .login_btn:hover{
+            box-shadow: 0px 0px 6px 0px #fff;
+        }
+
+        .host_profile:hover, .admin_profile:hover{
+            cursor: pointer;
+        }
+

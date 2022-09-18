@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script src="main.js" defer></script>
+    <title>Nav Bar</title>
+
+</head>
+<header>
+    <div th:fragment="header" class="header"  style="position:-webkit-sticky;position:sticky;top:0;z-index:1000; background-color: #fff">
+        <nav class="navbar" style="border-bottom: 1px solid silver;">
+            <div class="navbar__logo">
+                <a href="/">
+                    <img class="logo_img" src="/images/main/source/AMOR_CAMP_logo.png" >
+                </a>
+            </div>
+
+            <button class="login_btn" onclick="location.href='/login'" sec:authorize="isAnonymous()" >Login</button>
+
+            <!-- 일반 고객 -->
+            <div class="user_profile" sec:authorize="hasAnyAuthority('ROLE_USER')">
+                <div class="nav-item dropdown">
+                    <a class="profile-img" data-toggle="dropdown">
+                        <img style="width: 50px; height: 50px;" src="/images/main/source/menu.png" class="avatar" alt="Avatar" >
+                    </a>
+                    <div class="nav-item dropdown">
+                        <div class="dropdown-menu" style="margin-top: 16px;">
+                            <a href="/myInfo" class="dropdown-item">내 정보</a>
+                            <a href="/bookingList" class="dropdown-item">내 예약</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/member/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 호스트 -->
+            <div class="host_profile" sec:authorize="hasAnyAuthority('ROLE_HOST')">
+                <div class="nav-item dropdown" >
+                    <a class="profile-img" data-toggle="dropdown">
+                        <img style="width: 50px; height: 50px;" src="/images/main/source/menu.png" class="avatar" alt="Avatar" >
+                    </a>
+                    <div class="nav-item dropdown">
+                        <div class="dropdown-menu" style="margin-top: 16px;">
+                            <a href="/myInfo" class="dropdown-item">내 정보</a>
+                            <a onclick="chkCampFalse()" class="dropdown-item">캠핑장 등록</a>
+                            <a onclick="chkCampTrue()" class="dropdown-item">캠핑장 수정</a>
+                            <a onclick="chkCampTrue2()" class="dropdown-item">객실 등록</a>
+                            <a onclick="chkRoomTrue()" class="dropdown-item">객실 관리</a>
+                            <a onclick="reservationTrue()" class="dropdown-item">예약 내역</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/member/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 관리자 -->
+            <div class="host_profile" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <div class="nav-item dropdown" >
+                    <a class="profile-img" data-toggle="dropdown">
+                        <img style="width: 50px; height: 50px; " src="/images/main/source/menu.png" class="avatar" alt="Avatar" >
+                    </a>
+                    <div class="nav-item dropdown">
+                        <div class="dropdown-menu" style="margin-top: 16px;">
+                            <a href="/myInfo" class="dropdown-item">내 정보</a>
+                            <a href="/permit" class="dropdown-item">캠핑장 가입승인</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/member/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+</html>

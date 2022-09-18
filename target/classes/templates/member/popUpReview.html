@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 이용 후기</title>
+    <!-- 별점 css-->
+    <link href="/css/star.css" rel="stylesheet"/>
+    <!-- jquery 항상 최신버전 사용 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+
+    <style>
+        .review-popUp {
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        .readOnlyInput {
+            border: none;
+            margin: 5px 2px;
+        }
+
+        .readOnlyInput:focus {
+            outline: none;
+        }
+
+        #imgUrl {
+            width: 100%;
+            height: 250px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        #campName {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        #roomName {
+            font-size: 20px;
+        }
+
+        #checkInOutDate {
+            font-size: 20px;
+        }
+
+        .save_btn {
+            width: 30%;
+            height: 50px;
+            margin: 0 auto;
+            border: 2px solid #ca2027;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ca2027;
+            background-color: #fff;
+            box-shadow: 4px 4px 13px -4px #6e6e6e;
+
+        }
+
+
+    </style>
+
+</head>
+<body>
+<section class="review-popUp">
+    <div name="reviewForm" class="reviewForm">
+        <label style="font-size: 30px; color: black; font-weight: bold">이용후기</label><br/>
+        <input type="image" id="imgUrl" readonly>
+        <input type="hidden" id="campId" class="readOnlyInput"><br/>
+        <input type="hidden" id="bookingId" class="readOnlyInput"><br/>
+        <input type="text" id="campName" class="readOnlyInput" readonly><br/>
+        <input type="text" id="roomName" class="readOnlyInput" readonly><br/>
+        <input type="text" id="checkInOutDate" class="readOnlyInput" readonly><br/>
+
+        <fieldset style="padding: 0; ">
+            <span style="font-size: 14px; margin-left: 10px;">별점을 선택해주세요</span>
+            <input type="radio" name="reviewStar" value="5" id="rate1"><label
+                for="rate1">★</label>
+            <input type="radio" name="reviewStar" value="4" id="rate2"><label
+                for="rate2">★</label>
+            <input type="radio" name="reviewStar" value="3" id="rate3"><label
+                for="rate3">★</label>
+            <input type="radio" name="reviewStar" value="2" id="rate4"><label
+                for="rate4">★</label>
+            <input type="radio" name="reviewStar" value="1" id="rate5"><label
+                for="rate5">★</label>
+        </fieldset>
+        <div>
+            <textarea class="col-auto form-control reviewContent" type="text" onkeydown="resize(this)"
+                      onkeyup="resize(this)" placeholder="캠핑장의 이용후기를 남겨주세요. - 10자 이상" style="min-height: 150px;"></textarea>
+            <p>* 등록후에는 수정이 불가합니다. *</p>
+        </div>
+        <div style="margin: 0 auto;">
+            <button class="save_btn" onclick="saveForm()">등록하기</button>
+        </div>
+    </div>
+</section>
+<script>
+
+
+    $(document).ready(function () {
+        var object = JSON.parse(localStorage.getItem("reviewItems"));
+
+        document.getElementById("campId").value = object.campId;
+        document.getElementById("bookingId").value = object.bookingId;
+        document.getElementById("campName").value = object.campName;
+        document.getElementById("roomName").value = object.roomName;
+        document.getElementById("checkInOutDate").value = object.checkInOutDate;
+        document.getElementById("imgUrl").src = object.imgUrl;
+
+        // localStorage check
+        console.log("campId :: " + document.getElementById("campId").value);
+        console.log("campName :: " + document.getElementById("campName").value);
+        console.log("roomName :: " + document.getElementById("roomName").value);
+        console.log("checkInOutDate :: " + document.getElementById("checkInOutDate").value);
+        console.log("imgUrl :: " + document.getElementById("imgUrl").value);
+
+
+    });
+
+    function saveForm() {
+        var campId2 = document.getElementById("campId").value;
+        var url = "/saveReview";
+        var paramData = {
+            campId: $("#campId").val(),
+            bookingId: $("#bookingId").val(),
+            rating: $("input:radio[name=reviewStar]:checked").val(),
+            reviewContent: $(".reviewContent").val()
+        };
+        var param = JSON.stringify(paramData);
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json",
+            data: param,
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                if (result === true) {
+                    var answer = confirm("작성한 후기를 확인하시겠습니까?");
+                    if (answer === true) {
+                        window.opener.location.href = "/roomSearch/" + campId2;
+                        window.close();
+                    } else {
+                        window.opener.location.reload();
+                        window.close();
+                    }
+                } else {
+                    alert(result)
+                    location.href = 'redirect:/popUpReview';
+                }
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == '401') {
+                    alert('로그인 후 이용해주세요.');
+                    location.href = '/reservation';
+                } else {
+                    alert(jqXHR.responseText);
+                }
+            }
+        });
+
+
+    };
+</script>
+<script src="/js/main.js"></script>
+</body>
+</html>

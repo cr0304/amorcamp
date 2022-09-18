@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 객실 수정</title>
+    <link rel="stylesheet" href="/css/addForm.css">
+    <script src="/js/chkCampRoom.js"></script>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+            $(document).ready(function(){
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+                bindDomEvent();
+
+                document.getElementById("typeChecked").checked = true;
+            });
+
+            function bindDomEvent() {
+                $(".custom-file-input").on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
+                    //확장자 추출
+                    fileExt = fileExt.toLowerCase(); // 소문자 소환
+
+                    if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif"
+                        && fileExt != "png" && fileExt != "bmp") {
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
+
+                    $(this).siblings(".custom-file-label").html(fileName);
+                });
+            }
+        </script>
+    </th:block>
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+    <form role="form" method="post"  enctype="multipart/form-data" class="content_form" th:object="${roomFormDto}">
+        <div class="add_form">
+            <h2>객실 등록</h2>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <div class="add_form">
+            <input type="radio" name="campType" th:field="*{campType}" value="캠핑" id="typeChecked">캠핑
+            <input type="radio" name="campType" th:field="*{campType}" value="글램핑">글램핑
+            <input type="radio" name="campType" th:field="*{campType}" value="카라반">카라반
+        </div>
+        <div class="add_form">
+            <input type="text" th:field="*{roomName}" class="add_form_ctrl name" placeholder="객실이름">
+            <p th:if="${#fields.hasErrors('roomName')}" th:errors="*{roomName}" class="fieldError">Incorrect data</p>
+        </div>
+        <div class="add_form">
+            <input type="number" th:field="*{roomPrice}" class="add_form_ctrl price" placeholder="가격">
+            <p th:if="${#fields.hasErrors('roomPrice')}" th:errors="*{roomPrice}" class="fieldError">Incorrect data</p>
+        </div>
+
+        <div class="add_form">
+            <textarea th:field="*{roomShortInfo}" class="add_form_ctrl short" style="resize: none; padding-top: 8px;" placeholder="객실의 짧은 소개를 작성해주세요."></textarea>
+            <p th:if="${#fields.hasErrors('roomShortInfo')}" th:errors="*{roomShortInfo}" class="fieldError">Incorrect data</p>
+        </div>
+
+        <div class="add_form">
+            <textarea th:field="*{roomDetailInfo}" class="add_form_ctrl detail" placeholder="객실의 상세정보를 입력해주세요."></textarea>
+            <p th:if="${#fields.hasErrors('roomDetailInfo')}" th:errors="*{roomDetailInfo}" class="fieldError">Incorrect data</p>
+        </div>
+
+
+        <div th:if="${#lists.isEmpty(roomFormDto.roomImgDtoList)}">
+            <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="roomImgFile">
+                    <label class="custom-file-label" th:text="객실이미지 + ${num}"></label>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(roomFormDto.roomImgDtoList)}">
+            <div class="form-group" th:each="roomImgDto, status: ${roomFormDto.roomImgDtoList}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="roomImgFile">
+                    <input type="hidden" name="roomImgIds" th:value="${roomImgDto.id}">
+                    <label class="custom-file-label" th:text="${not #strings.isEmpty(roomImgDto.oriImgName)} ?
+                    ${roomImgDto.oriImgName} : '객실이미지'+ ${status.index+1}"></label>
+                </div>
+            </div>
+        </div>
+        <div class="add_form" style="display: flex; justify-content: center; ">
+            <button type="submit">수정하기</button>
+        </div>
+    </form>
+</section>
+</body>
+</html>

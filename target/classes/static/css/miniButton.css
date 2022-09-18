@@ -1,0 +1,40 @@
+
+.btn-style{
+    height: 35px;
+    margin: 1px;
+    width: 78px;
+    border: 1.5px solid #ca2027;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    color: #ca2027;
+    outline: none !important;
+    transition: all 0.5s;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+.btn-style:active{
+    transition: all 0.1s;
+    position:relative;
+    top: 0.5px; left: 0.5px;
+    box-shadow: none !important;
+
+}
+
+.btn-style:hover{
+    box-shadow: 3px 3px 4px 0px #b0aeae;
+}
+
+.disabled-btn{
+    height: 35px;
+    margin: 1px;
+    width: 78px;
+    border: 1.5px solid #949494;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    color: #949494;
+    outline: none !important;
+    transition: all 0.5s;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+
+}

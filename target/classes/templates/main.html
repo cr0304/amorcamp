@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>AMOR CAMP - 종합 캠핑 예약</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/topCamp.css">
+    <!-- use for xeicon -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
+    <th:block layout:fragment="css">
+        <style>
+            /* 헤더 투명 */
+            .header {
+                background: transparent !important;
+            }
+
+            /*헤더 밑줄 제거*/
+            .navbar {
+                border-bottom: none !important;
+            }
+
+            @import url('https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap');
+
+            .no {
+                font-family: 'Mouse Memoirs', sans-serif;
+                color: white;
+                margin: 50px auto;
+                width: 100%;
+                font-size: 50px;
+                letter-spacing: 20px;
+                text-align: center;
+
+                text-shadow: 0 0 5px #fff;
+            }
+
+            .main_img {
+                height: 270px;
+
+            }
+
+            .main_items {
+                position: relative;
+                top: -130px;
+            }
+
+            .search {
+                margin: 74px 0 70px 0;
+                display: flex;
+                justify-content: center;
+
+            }
+
+            .search input {
+                padding-left: 30px;
+                width: 700px;
+                height: 52px;
+                border: none;
+                border-radius: 15px 0 0 15px;
+                font-size: 20px;
+                box-shadow: 1px 1px 10px 1px white;
+                background-color: #ffffff;
+                opacity: 0.8;
+            }
+
+            .search input:hover {
+                opacity: 1;
+            }
+
+            .search input:focus {
+                outline: none;
+                opacity: 1;
+
+            }
+
+            .search img {
+                height: 52px;
+                border-radius: 0 15px 15px 0;
+                box-shadow: 1px 1px 10px white;
+                opacity: 0.8;
+            }
+
+            .search img:hover {
+                opacity: 1;
+            }
+
+            .main_menu {
+                display: flex;
+                justify-content: center;
+
+            }
+
+            .main_menu ul {
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .main_menu li {
+                width: 120px;
+                height: 120px;
+                display: inline-block;
+                margin: 10px 50px;
+                padding: 0px;
+                box-shadow: 1px 1px 10px white;
+                border-radius: 20px;
+                background-color: #FFFFFF;
+                opacity: 0.8;
+            }
+
+            .main_menu li:hover {
+                opacity: 1;
+            }
+
+            .main_menu img {
+                margin: 10px;
+                width: 100px;
+                height: 100px;
+            }
+
+            body {
+                background-image: url('images/main/bg/bg_main.png');
+                background-repeat: no-repeat;
+                background-position: center top;
+                background-color: #000;
+            }
+
+            .m_searchBtn {
+                padding: 0;
+                border-radius: 0 15px 15px 0;
+                border: none;
+
+            }
+
+        </style>
+    </th:block>
+
+</head>
+<body layout:fragment="content">
+<div class="main_content">
+    <div class="main_img">
+
+    </div>
+    <div class="main_items">
+        <div class="no">
+            AMOR CAMP
+        </div>
+
+        <form class="search" th:action="@{/campSearch/byKeyword}" method="get">
+            <input type="search" name="searchQuery" placeholder="검색할 캠핑장명, 지역을 입력해주세요.">
+            <button type="submit" class="m_searchBtn"><img src="images/main/source/icon_GO.png"></button>
+        </form>
+
+        <div class="main_menu">
+            <ul>
+                <li><a href="/campSearch/byKeyword/camping" name="searchQuery" value="캠핑장"><img
+                        src="images/main/source/camping_1.png"></a></li>
+                <li><a href="/campSearch/byKeyword/glamping" name="searchQuery" value="글램핑"><img
+                        src="images/main/source/glamping_1.png"></a></li>
+                <li><a href="/campSearch/byKeyword/caravan" name="searchQuery" value="카라반"><img
+                        src="images/main/source/caravan_1.png"></a></li>
+            </ul>
+        </div>
+        <!-- Top 5 -->
+        <div class="down-arrow-box" onclick="scrollDown()">
+            <i class="xi-angle-down"></i>
+        </div>
+    </div>
+
+    <div class="hotPlace">
+        <h4 style="color: #FFFFFF;">인기 캠핑장 TOP5</h4>
+    </div>
+
+    <div class="slide-container swiper">
+        <th:block th:each="camp, status: ${campSearchDtoList}">
+            <div id="topCampCard" class="slide-content" onclick="showThisCamp(this)">
+                <input type="hidden" id="campId" th:value="${camp.id}">
+                <div class="card-wrapper swiper-wrapper">
+                    <div class="card swiper-slide">
+                        <div class="image-content">
+                            <img th:src="${camp.imgUrl}" class="card-img-top" th:alt="${camp.campName}">
+                        </div>
+                        <div class="card-content">
+                            <h2 class="name">[[${camp.campName}]]</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+
+        <!-- JavaScript -->
+        <script src="js/main.js"></script>
+        <script>
+            // 인기 캠핑장 클릭 이동
+            function showThisCamp(obj) {
+                var campId = obj.children[0].value;
+                location.href = "/roomSearch/" + campId
+            }
+        </script>
+    </div>
+</div>
+</body>
+</html>

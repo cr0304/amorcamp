@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 캠핑장 목록</title>
+    <link rel="stylesheet" href="/css/list_2.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <script src="/js/chkCampRoom.js" defer></script>
+    <style>
+        .notFound {
+            color: #c51818;
+            margin: 20px;
+        }
+
+        .detail_info {
+            width: 200px;
+            height: 88%;
+            position: fixed;
+            top: 17%;
+            right: 4%;
+            overflow: scroll;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .bookMarkBtn {
+            position: fixed;
+            right: 6%;
+            top: 11%;
+            color: black;
+        }
+
+        .bookMarkBtn img {
+            width: 40px;
+        }
+
+        .bookMarkBtn i {
+            color: #ca2027;
+            text-shadow: #000000;
+        }
+
+        .bookMarkBtn span {
+            color: black;
+            letter-spacing: 5px;
+        }
+
+        .bmItem {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .bmItem img {
+            width: 90%;
+            height: 150px;
+            box-shadow: #919191 5px 5px 6px 1px;
+        }
+
+        .bmItem-campName {
+            margin: 0;
+            padding: 0;
+            color: black;
+            font-weight: 550;
+            letter-spacing: 2px;
+            position: relative;
+            left: 8px;
+        }
+
+        .bmItem-delete {
+            margin-left: 15px;
+            cursor: pointer;
+            font-weight: bold;
+
+        }
+
+        .bmItem-delete:hover {
+            color: #ca2027;
+        }
+    </style>
+
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+
+            $(document).ready(function () {
+                var object = [[${cateCheckDto}]];
+                <!--캥핑 유형-->
+                if (object.camping === "camping") {
+                    $("#camping").prop("checked", true);
+                }
+                if (object.glamping === "glamping") {
+                    $("#glamping").prop("checked", true);
+                }
+                if (object.caravan === "caravan") {
+                    $("#caravan").prop("checked", true);
+                }
+                <!--주변 환경, 지역-->
+                if (object.mountain === "mountain") {
+                    $("#mountain").prop("checked", true);
+                }
+                if (object.sea === "sea") {
+                    $("#sea").prop("checked", true);
+                }
+                if (object.vally === "vally") {
+                    $("#vally").prop("checked", true);
+                }
+                if (object.city === "city") {
+                    $("#city").prop("checked", true);
+                }
+
+            });
+
+        </script>
+    </th:block>
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+    <div class="search_form">
+        <div class="left_contents">
+            <form role="form" method="get" th:action="@{/campSearch/byKeyword}">
+                <div class="l_content" style="margin-top: 0;">
+                    <label>검색</label><br>
+                    <div style="display: flex;">
+                        <input type="search" name="searchQuery" placeholder="지역, 캠핑장 이름" style="margin:0; height:40px;">
+                        <button type="submit" class="search_btn" style="height: 40px; width: 20%"><i
+                                class="xi-magnifier"></i></button>
+                    </div>
+                </div>
+            </form>
+            <form th:action="@{/categoryChk}" role="form" method="get" th:object="${cateCheckDto}">
+                <hr>
+                <div class="l_content">
+                    <input type="checkbox" id="cateCheckAll" onclick="checkAll()"><label>전체보기</label>
+                </div>
+                <div class="l_content">
+                    <label>캠핑 유형</label><br>
+                    <input type="checkbox" class="cateChkBox" id="camping" name="camping"
+                           value="camping"><label>캠핑</label><br>
+                    <input type="checkbox" class="cateChkBox" id="glamping" name="glamping"
+                           value="glamping"><label>글램핑</label><br>
+                    <input type="checkbox" class="cateChkBox" id="caravan" name="caravan"
+                           value="caravan"><label>카라반</label><br>
+                </div>
+                <div class="l_content">
+                    <label>캠핑장 주변 환경</label><br>
+                    <input type="checkbox" class="cateChkBox" id="mountain" name="mountain"
+                           value="mountain"><label>산</label><br>
+                    <input type="checkbox" class="cateChkBox" id="sea" name="sea" value="sea"><label>바다</label><br>
+                    <input type="checkbox" class="cateChkBox" id="vally" name="vally"
+                           value="vally"><label>계곡</label><br>
+                    <input type="checkbox" class="cateChkBox" id="city" name="city" value="city"><label>도심</label>
+                </div>
+                <div class="l_content">
+                    <label>지역</label><br>
+
+                    <select class="search_dropdown" id="area" name="area">
+                        <option class="dropdown-op" value="" hidden>지역을 선택해 주세요.</option>
+                        <optgroup class="dropdown-op" label="서울">
+                            <option th:selected="${cateCheckDto.area} == '강남'" class="dropdown-op" value="강남">강남</option>
+                            <option th:selected="${cateCheckDto.area} == '구로'"class="dropdown-op" value="구로">구로</option>
+                            <option class="dropdown-op" value="은평">은평</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="경기도">
+                            <option th:selected="${cateCheckDto.area} == '수원'"class="dropdown-op" value="수원">수원</option>
+                            <option th:selected="${cateCheckDto.area} == '고양'"class="dropdown-op" value="고양">고양</option>
+                            <option th:selected="${cateCheckDto.area} == '부천'"class="dropdown-op" value="부천">부천</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="경상도">
+                            <option th:selected="${cateCheckDto.area} == '울산'"class="dropdown-op" value="울산">울산</option>
+                            <option th:selected="${cateCheckDto.area} == '대구'"class="dropdown-op" value="대구">대구</option>
+                            <option th:selected="${cateCheckDto.area} == '부산'"class="dropdown-op" value="부산">부산</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="충청도">
+                            <option th:selected="${cateCheckDto.area} == '아산'"class="dropdown-op" value="아산">아산</option>
+                            <option th:selected="${cateCheckDto.area} == '당진'"class="dropdown-op" value="당진">당진</option>
+                            <option th:selected="${cateCheckDto.area} == '천안'"class="dropdown-op" value="천안">천안</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="강원도">
+                            <option th:selected="${cateCheckDto.area} == '속초'"class="dropdown-op" value="속초">속초</option>
+                            <option th:selected="${cateCheckDto.area} == '평창'"class="dropdown-op" value="평창">평창</option>
+                            <option th:selected="${cateCheckDto.area} == '강릉'"class="dropdown-op" value="강릉">강릉</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="전라도">
+                            <option th:selected="${cateCheckDto.area} == '목포'"class="dropdown-op" value="목포">목포</option>
+                            <option th:selected="${cateCheckDto.area} == '광주'"class="dropdown-op" value="광주">광주</option>
+                            <option th:selected="${cateCheckDto.area} == '전주'"class="dropdown-op" value="전주">전주</option>
+                        </optgroup>
+                        <optgroup class="dropdown-op" label="제주">
+                            <option th:selected="${cateCheckDto.area} == '제주'"class="dropdown-op" value="제주">제주</option>
+                            <option th:selected="${cateCheckDto.area} == '서귀포'"class="dropdown-op" value="서귀포">서귀포</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button type="submit" class="search_btn">search</button>
+            </form>
+        </div>
+
+
+        <div class="right_contents">
+            <div class="content_head">
+                <label style="font-size: 20px">캠핑장 목록</label>
+            </div>
+
+            <!--메인 아이콘 또는 서칭-->
+            <div class="r_content">
+                <input type="hidden" name="searchQuery" th:value="${searchDto.searchQuery}">
+                <div th:if="${#strings.isEmpty(searchDto.searchQuery) and campSearchDtoList == null}">
+                    <label class="notFound">검색결과가 없습니다.</label>
+                    <script>
+                        alert('검색어를 입력해주세요.');
+                    </script>
+                </div>
+                <div th:if="${not #strings.isEmpty(searchDto.searchQuery)}">
+                    <p th:text="${searchDto.searchQuery} + ' 검색 결과'"></p>
+                    <th:block th:each="camp, status: ${campList}">
+
+                        <table class="campTable">
+                            <tr>
+                                <td rowspan="3" class="td_img" th:href="'/roomSearch/'+${camp.id}">
+                                    <a th:href="'/roomSearch/'+${camp.id}">
+                                        <img th:src="${camp.imgUrl}" th:alt="${camp.campName}">
+                                    </a>
+                                </td>
+                                <td class="content_item td_name">[[${camp.campName}]]</td>
+                                <td class="content_item td_price">1박 <span> [[${camp.min}]] ~</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="content_item td_detail">
+                                    [[${camp.campInfo}]]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content_item td_hashtag">
+                                    <label>#[[${camp.surroundings}]]</label>
+                                    <label>#[[${camp.campArea}]]</label>
+                                </td>
+
+                                <td class="content_item td_scrap">
+                                    <a th:href="'/scrapList/'+${camp.id}">
+                                        <img src="/images/main/source/icon_bookmark_cp.png">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </th:block>
+                </div>
+            </div>
+
+            <!--카테고리 체크로 검색-->
+            <div class="r_content">
+                <div th:if="${campSearchDtoList != null}">
+                    <th:block th:each="camp, status: ${campSearchDtoList}">
+                        <table class="campTable" th:href="'/camp/'+${camp.id}">
+                            <tr>
+                                <td rowspan="3" class="td_img">
+                                    <a th:href="'/roomSearch/'+${camp.id}">
+                                        <img th:src="${camp.imgUrl}" th:alt="${camp.campName}">
+                                    </a>
+                                </td>
+                                <td class="content_item td_name">[[${camp.campName}]]</td>
+                                <td class="content_item td_price">1박<span> [[${camp.min}]] ~</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="content_item td_detail">
+                                    [[${camp.campInfo}]]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content_item td_hashtag">
+                                    <label>#[[${camp.surroundings}]]</label>
+                                    <label>#[[${camp.campArea}]]</label>
+                                </td>
+                                <td class="content_item td_scrap">
+                                    <a th:href="'/scrapList/'+${camp.id}">
+                                        <img src="/images/main/source/icon_bookmark_cp.png">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <a class="bookMarkBtn" id="showDetail"><img src="/images/main/source/icon_bookmark_cp.png"><span>스크랩LIST</span></a>
+    <div class="detail_info">
+        <th:block th:each="scrapCamp: ${scrapCamps}">
+            <div class="bmItem">
+                <a th:href="'/roomSearch/scrap/'+${scrapCamp.scrapCampId}">
+                    <img th:src="${scrapCamp.imgUrl}">
+                </a>
+                <span class="bmItem-campName" th:text="${scrapCamp.campName}"></span>
+                <a class="bmItem-delete" th:href="'/roomSearch/delete/'+${scrapCamp.scrapCampId}">x</a>
+            </div>
+        </th:block>
+    </div>
+
+    <script src="/js/main.js"></script>
+</section>
+
+</body>
+</html>

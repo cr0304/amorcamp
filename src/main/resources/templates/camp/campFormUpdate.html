@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>AMOR CAMP - 캠핑장 수정</title>
+  <link rel="stylesheet" href="/css/addForm.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+  <script src="/js/chkCampRoom.js"></script>
+</head>
+
+
+<th:block layout:fragment="script">
+
+  <script th:inline="javascript">
+    /* 다음 주소 연동 */
+    window.onload = function(){
+      document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
+        //카카오 지도 발생
+        new daum.Postcode({
+          oncomplete: function(data) { //선택시 입력값 세팅
+            document.getElementById("address_kakao").value = data.address; // 주소 넣기
+          }
+        }).open();
+      });
+    }
+
+
+    $(document).ready(function(){
+      var errorMessage = [[${errorMessage}]];
+      if(errorMessage != null){
+        alert(errorMessage);
+      }
+      bindDomEvent();
+    });
+
+    function bindDomEvent(){
+      $(".custom-file-input").on("change", function(){
+        var fileName = $(this).val().split("\\").pop();
+        var fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
+        //확장자 추출
+        fileExt = fileExt.toLowerCase(); // 소문자 소환
+
+        if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif"
+                && fileExt != "png" &&fileExt != "bmp"){
+          alert("이미지 파일만 등록이 가능합니다.");
+          return;
+        }
+
+        $(this).siblings(".custom-file-label").html(fileName);
+      });
+    }
+
+
+    // time picker
+    $(function() {
+          $("#time1").timepicker({
+            timeFormat: 'H:mm',
+            interval: 60,
+            minTime: '10',
+            maxTime: '20:00',
+            defaultTime: '입실시간',
+            startTime: '10:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: true
+          });
+        $("#time2").timepicker({
+            timeFormat: 'H:mm',
+            interval: 60,
+            minTime: '10',
+            maxTime: '20:00',
+            defaultTime: '퇴실시간',
+            startTime: '10:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: true
+        });
+    });
+  </script>
+
+</th:block>
+
+
+<body>
+<section layout:fragment="content" class="page_form">
+  <form class="content_form" role="form" method="post" enctype="multipart/form-data" th:object="${campFormDto}">
+
+    <div class="add_form">
+      <h2>캠핑장 정보 수정</h2>
+      <input type="hidden" th:field="*{id}">
+    </div>
+    <div class="add_form">
+      <input type="text" class="add_form_ctrl name" th:field="*{campName}" placeholder="캠핑장 이름">
+        <p th:if="${#fields.hasErrors('campName')}" th:errors="*{campName}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form checkInOut-time">
+      <div>
+      <input type="text" id="time1" th:field="*{inTime}" name="time1" style="width:330px;"
+             placeholder="Check In Time" readonly>
+      <p th:if="${#fields.hasErrors('inTime')}" th:errors="*{inTime}" class="fieldError">Incorrect data</p>
+      </div>
+      <div>
+      <input type="text" id="time2" th:field="*{outTime}" name="time2" style="width:330px;"
+             placeholder="Check Out Time" readonly>
+      <p th:if="${#fields.hasErrors('outTime')}" th:errors="*{outTime}" class="fieldError">Incorrect data</p>
+      </div>
+    </div>
+
+    <div class="add_form">
+      <input type="text" class="add_form_ctrl price" th:field="*{address}" placeholder="캠핑장 주소"
+             id="address_kakao" name="address" readonly>
+        <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form">
+      <textarea type="text" class="add_form_ctrl camp_info" style="padding: 10px;" th:field="*{campInfo}"
+                placeholder="캠핑장 상세정보 / 20자 이상 100자 이하"></textarea>
+      <p th:if="${#fields.hasErrors('campInfo')}" th:errors="*{campInfo}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form">
+      <input type="text" class="add_form_ctrl price" th:field="*{bNumber}"
+             placeholder="사업자 번호 / '-'를 제외한 10자로 입력해주세요.">
+    <p th:if="${#fields.hasErrors('bNumber')}" th:errors="*{bNumber}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form">
+      <select class="add_form_ctrl" th:field="*{campArea}">
+        <option class="dropdown-op" value="" hidden>지역을 선택해 주세요.</option>
+        <optgroup class="dropdown-op" label="서울">
+          <option class="dropdown-op" value="강남">강남</option>
+          <option class="dropdown-op" value="구로">구로</option>
+          <option class="dropdown-op" value="은평">은평</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="경기도">
+          <option class="dropdown-op" value="수원">수원</option>
+          <option class="dropdown-op" value="고양">고양</option>
+          <option class="dropdown-op" value="부천">부천</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="경상도">
+          <option class="dropdown-op" value="울산">울산</option>
+          <option class="dropdown-op" value="대구">대구</option>
+          <option class="dropdown-op" value="부산">부산</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="충청도">
+          <option class="dropdown-op" value="아산">아산</option>
+          <option class="dropdown-op" value="당진">당진</option>
+          <option class="dropdown-op" value="천안">천안</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="강원도">
+          <option class="dropdown-op" value="속초">속초</option>
+          <option class="dropdown-op" value="평창">평창</option>
+          <option class="dropdown-op" value="강릉">강릉</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="전라도">
+          <option class="dropdown-op" value="목포">목포</option>
+          <option class="dropdown-op" value="광주">광주</option>
+          <option class="dropdown-op" value="전주">전주</option>
+        </optgroup>
+        <optgroup class="dropdown-op" label="제주">
+          <option class="dropdown-op" value="제주">제주</option>
+          <option class="dropdown-op" value="서귀포">서귀포</option>
+        </optgroup>
+      </select>
+      <p th:if="${#fields.hasErrors('campArea')}" th:errors="*{campArea}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form">
+      <select class="add_form_ctrl" th:field="*{surroundings}" name="surrounding">
+        <option class="dropdown-op" value="" hidden>캠핑장 주변환경을 선택해 주세요.</option>
+        <option class="dropdown-op" value="산">산</option>
+        <option class="dropdown-op" value="바다">바다</option>
+        <option class="dropdown-op" value="계곡">계곡</option>
+        <option class="dropdown-op" value="도심">도심</option>
+      </select>
+      <p th:if="${#fields.hasErrors('surroundings')}" th:errors="*{surroundings}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="add_form" th:if="${campFormDto.campImgDto == null}">
+      <div class="form-group">
+        <div class="custom-file img-div">
+          <input type="file" class="custom-file-input" name="campImgFile">
+          <label class="custom-file-label" th:text="${'캠핑장 대표이미지'}"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="add_form" th:if="${campFormDto.campImgDto != null}">
+      <div class="form-group" th:each="campImgDto, status: ${campFormDto.campImgDto}">
+        <div class="custom-file img-div add_form_ctrl">
+          <input type="file" class="custom-file-input" name="campImgFile">
+          <input type="hidden" name="campImgId" th:value="${campImgDto.id}">
+          <label class="custom-file-label" th:text="${not #strings.isEmpty(campImgDto.oriImgName)} ?
+                    ${campImgDto.oriImgName} : ${'캠핑장 대표이미지'}" ></label>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="add_form" style="display: flex; justify-content: center;">
+      <button type="submit" th:formaction="@{'/campFormUpdate/'+${campFormDto.id}}">수정하기</button>
+    </div>
+  </form>
+</section>
+</body>
+</html>

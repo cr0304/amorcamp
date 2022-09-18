@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>AMOR CAMP - LOGIN</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        body{
+            background-image: url('/images/main/bg/bg_login.jpg');
+            height: 1000px;
+        }
+
+        .page-title{
+            margin-bottom:50px;
+        }
+
+
+    </style>
+</head>
+<body class="img js-fullheight">
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section">AMOR CAMP</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="login-wrap p-0">
+                    <div class="page-title">
+                        <a href="/"><img src="../images/main/source/icon_before_fff.png"></a>
+                        <h3>로그인</h3>
+                    </div>
+                    <form action="/login" method="post" role="form" class="signin-form">
+                        <div class="form-group">
+                            <input th:for="email" type="email" name="email" class="form-control" placeholder="이메일" required>
+                        </div>
+                        <div class="form-group">
+                            <input th:for="password" id="password-field" type="password" name="password" class="form-control" placeholder="비밀번호" required>
+                        </div>
+                        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+                        <div class="form-group">
+                            <button type="submit" name="member" class="form-control btn btn-primary submit px-3">로그인</button>
+                        </div>
+                        <div class="form-group" style="text-align: right">
+                            <a href="/join" style="color: #fff">회원가입</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

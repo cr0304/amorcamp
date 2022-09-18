@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link th:href="@{/css/layout.css}" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- 다음 주소  API -->
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <!-- REMIX ICON 사용하기 위한 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <!-- jquery 항상 최신버전 사용 -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <!-- DATE LIBRARY -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <!-- DATE RANGE PICKER -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+  <!-- PONT AWESOME -->
+  <script src="https://kit.fontawesome.com/aab6a68aed.js" crossorigin="anonymous"></script>
+
+  <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <th:block layout:fragment="script">
+  <script src="/js/chkCampRoom.js"></script>
+
+  </th:block>
+
+
+  <th:block layout:fragment="css"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/header::header"></div>
+<div layout:fragment="content" class="content">
+  본문영역
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

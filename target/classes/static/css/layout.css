@@ -1,0 +1,15 @@
+html{
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+    width:100vw;
+}
+
+body{
+    min-height: 20%;
+}
+
+.page_form{
+            width: 1100px;
+            margin: 0 auto;
+        }

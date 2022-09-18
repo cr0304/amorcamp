@@ -1,0 +1,60 @@
+.reviewForm fieldset{
+    display: inline-block;
+    direction: rtl;
+    border:0;
+}
+.reviewForm fieldset legend{
+    text-align: right;
+}
+.reviewForm input[type=radio]{
+    display: none;
+}
+.reviewForm label{
+    font-size: 2.3em;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+.reviewForm input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+.reviewContent {
+    width: 100%;
+
+    padding: 10px;
+    box-sizing: border-box;
+    border: solid 1.5px #D3D3D3;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+
+    margin: 0;
+}
+
+/* review section */
+.reviewWriter, .reviewContent {
+    margin: 0;
+}
+
+.reviewWriter {
+    font-size: 15px;
+    color: black;
+    margin-right: 8px;
+    margin-left: 10px;
+}
+
+.reviewContent {
+    width: 99%;
+    padding-top: 40px;
+    overflow: visible;
+}
+
+.rating-box {
+    position: absolute;
+    padding: 0;
+    font-size: 20px;
+}
+
+.rating-box label {
+    font-size: 19px;
+    letter-spacing: -4px;
+}

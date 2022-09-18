@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>AMOR CAMP - 사업자 가입승인</title>
+  <link rel="stylesheet" href="css/list_1.css">
+  <link rel="stylesheet" href="css/miniButton.css">
+
+  <!-- 승인 허가/거절시 tr 제거 -->
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+    $(document).ready(function(){
+        var errorMessage = [[${errorMessage}]];
+        if(errorMessage != null){
+            alert(errorMessage);
+        }
+    });
+
+  </script>
+  </th:block>
+
+
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+  <div class="list_page_form">
+    <div class="page_title">
+      <h2>사업자 가입 승인</h2>
+    </div>
+    <div class="list_table">
+      <form role="form" method="post" th:object="${camps}">
+        <table>
+          <thead>
+          <tr>
+            <th>캠프 아이디</th>
+            <th>캠핑장 이름</th>
+            <th>캠핑장 주소</th>
+            <th>사업자 번호</th>
+            <th>가입승인</th>
+            <th>가입거절</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="camp : ${camps}">
+            <td th:text="${camp.id}"></td>
+            <td th:text="${camp.campName}"></td>
+            <td th:text="${camp.address}"></td>
+            <td th:text="${camp.bNumber}"></td>
+            <td><button class="btn-style" th:formaction="@{'/permit/ok/'+${camp.id}}" type="submit">가입승인</button></td>
+            <td><button class="btn-style" th:formaction="@{'/permit/no/'+${camp.id}}" type="submit">가입거절</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div>
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a aria-label='Previous' class="page-link">
+            <span aria-hidden="true">이전</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a tclass="page-link">[[${page}]]</a>
+        </li>
+        <li class="page-item" >
+          <a aria-label="Next" class="page-link">
+            <span aria-hidden="true">다음</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+</body>
+</html>

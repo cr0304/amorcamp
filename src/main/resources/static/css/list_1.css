@@ -1,0 +1,84 @@
+        .list_page_form{
+            width: 1000px;
+            margin: 20px auto;
+        }
+        .page_title{
+            text-align: center;
+            margin: 30px 0;
+        }
+        .search-content{
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .search-type, .search-text, .search-btn{
+            height: 35px;
+            margin: 2px;
+        }
+        .search-type{
+            width: 70px;
+        }
+        .search-btn{
+            width: 70px;
+            border: 1px solid #ca2027;
+            background-color: #ca2027;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .list_table{
+            min-height: 500px;
+            color: #000;
+        }
+        .list_table table{
+            width: 1000px;
+
+        }
+        .list_table tr ,.list_table th, .list_table td{
+            padding: 5px 10px;
+        }
+        .list_table th{
+            border-bottom: 2px solid #000;
+            text-align: center;
+        }
+        .list_table td{
+            border-top: 1px solid gray;
+            text-align: center;
+        }
+        .b_status{
+            margin-bottom: 0;
+            padding: 3px 5px;
+        }
+        .complete{
+            border: 2px solid #5e5edf;
+            border-radius: 6px;
+            color: #5e5edf;
+        }
+         .cancel{
+            border: 2px solid #ff5151;
+            border-radius: 6px;
+            color: #ff5151;
+        }
+         .end{
+            border: 2px solid gray;
+            border-radius: 6px;
+            color: #626262;
+        }
+
+        .permit_chk{
+            width: 18px;
+            height: 18px;
+            border: 1px solid #000;
+            background: #fff;
+            position: relative;
+                top: 4px;
+        }
+
+        .permission{
+            background-color: #000;
+        }
+
+        .reject{
+
+        }

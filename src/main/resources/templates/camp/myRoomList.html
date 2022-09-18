@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 내 객실 목록</title>
+    <link rel="stylesheet" href="css/list_2.css">
+    <link rel="stylesheet" href="css/miniButton.css">
+
+    <!-- drop down box -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/dropDownBox.css">
+
+    <!-- date picker -->
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="/js/chkCampRoom.js" defer></script>
+    <script src="/js/main.js"></script>
+    <style>
+        .btn-style {
+            height: 45px;
+            margin: 5px;
+        }
+
+        .btns {
+            display: flex;
+            margin: 10px;
+        }
+
+        <!--
+        carousel-slider
+
+        -->
+        .mySlides {
+            display: none
+        }
+
+        img {
+            vertical-align: middle;
+            width: 780px;
+            height: 435px;
+        }
+
+        /* Slideshow container */
+        .slideshow-container {
+            max-width: 1000px;
+            position: relative;
+            margin: auto;
+        }
+
+        /* Next & previous buttons */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 35px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* The dots/bullets/indicators */
+        .dot {
+            cursor: pointer;
+            height: 10px;
+            width: 10px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+
+
+        @keyframes fade {
+            from {
+                opacity: .4
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        /* On smaller screens, decrease text size */
+        @media only screen and (max-width: 300px) {
+            .prev, .next, .text {
+                font-size: 11px
+            }
+        }
+    </style>
+    <script>
+        function updateRoom(obj) {
+            var roomId = $(obj).parent().children("#roomId").val();
+            location.href = '/roomFormUpdate/' + roomId;
+        }
+
+        function deleteRoom(obj) {
+            var roomId = $(obj).parent().children("#roomId").val();
+            location.href = '/roomFormDelete/' + roomId;
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+    <div class="right_contents" style="margin: 20px auto;">
+        <div class="r_content">
+            <th:block th:each="room, status: ${roomList}">
+                <div class="roomCard">
+
+                    <table class="roomTable">
+                        <tr>
+                            <td rowspan="3" class="td_img"><img th:src="${room.imgUrl}"></td>
+                            <td class="content_item td_name">[[${room.roomName}]]</td>
+                            <td class="content_item td_price">1박 <span>[[${room.roomPrice}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="content_item td_detail"
+                                style="padding-right: 20px; padding-bottom: 5px;">
+                                [[${room.roomShortInfo}]]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content_item td_hashtag">
+                                <label>#[[${room.campType}]]</label>
+                            </td>
+                            <td class="btns">
+                                <button class="btn-style" id="showDetail" onclick="showDetail(this)">상세정보</button>
+                                <button class="btn-style" id="updateRoom" onclick="updateRoom(this)">수정하기</button>
+                                <button class="btn-style" id="deleteRoom" onclick="deleteRoom(this)">삭제하기</button>
+                                <input type="hidden" id="roomId" th:value="${room.id}">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- list -->
+
+                    <!-- room img list -->
+                    <div class="detail_info" style="display: none">
+                        <div class="slideshow-container">
+                            <div class="mySlides" th:if="${room.imgUrl != ''}">
+                                <div class="numbertext">1</div>
+                                <img th:src="${room.imgUrl}" style="width:100%">
+                            </div>
+                            <div class="mySlides" th:if="${room.subImgUrl1 != ''}">
+                                <div class="numbertext">2</div>
+                                <img th:src="${room.subImgUrl1}" style="width:100%">
+                            </div>
+                            <div class="mySlides" th:if="${room.subImgUrl2 != ''}">
+                                <div class="numbertext">3</div>
+                                <img th:src="${room.subImgUrl2}" style="width:100%">
+                            </div>
+                            <div class="mySlides" th:if="${room.subImgUrl3 != ''}">
+                                <div class="numbertext">4</div>
+                                <img th:src="${room.subImgUrl3}" style="width:100%">
+                            </div>
+                            <div class="mySlides" th:if="${room.subImgUrl4 != ''}">
+                                <div class="numbertext">5</div>
+                                <img th:src="${room.subImgUrl4}" style="width:100%">
+                            </div>
+                            <a class="prev" onclick="plusSlides(this,-1)">❮</a>
+                            <a class="next" onclick="plusSlides(this,1)">❯</a>
+                        </div>
+
+                        <div class="roomDetailInfo">
+                            <h3>상세정보</h3>
+                            [[${room.roomDetailInfo}]]
+                        </div>
+                    </div>
+            </th:block>
+            <!-------------------------------------------------------------------------->
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

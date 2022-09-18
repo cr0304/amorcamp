@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 결제</title>
+
+    <style>
+        .customerInfo_form {
+            height: auto;
+            margin: 40px 80px 0 80px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .left_contents {
+            width: 70%;
+            padding: 20px;
+            line-height: 25px;
+        }
+
+        .right_contents {
+            width: 30%;
+            padding: 20px;
+            background-color: #bfbebe33;
+            border-radius: 10px;
+        }
+
+        .l-content {
+            margin: 40px 0;
+        }
+
+        .l-content label {
+            font-size: 18px;
+            color: #000;
+        }
+
+        .l-c-txtbox {
+            width: 400px;
+            height: 40px;
+            padding-left: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+        }
+
+        .chk-box {
+            margin-right: 5px;
+        }
+
+        .r-content {
+            margin: 30px 0;
+            line-height: 20px;
+        }
+
+        .r-c-data {
+            width: 90%;
+            font-size: 23px;
+            color: #000;
+            background-color: #f2f2f2;
+            border: none;
+            outline: none;
+        }
+        #price{
+            font-size: 28px;
+            font-weight: bold;
+            color: #ca2027;
+        }
+
+        .r-c-data span {
+            font-size: 30px;
+            font-weight: bold;
+            color: #ca2027;
+            margin-right: 5px;
+        }
+
+        .r-c-btn {
+            border: 1px solid #ca2027;
+            width: 100%;
+            height: 50px;
+            background-color: #ca2027;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 20px;
+
+        }
+
+    </style>
+
+    <script>
+        var obj = JSON.parse(localStorage.getItem("param"));
+
+        $(document).ready(function () {
+            document.getElementById("campName").innerText = obj.campName;
+            document.getElementById("roomName").innerText = obj.roomName;
+            document.getElementById("checkIn").innerText = obj.checkIn;
+            document.getElementById("checkOut").innerText = obj.checkOut;
+            document.getElementById("price").innerText = obj.price;
+
+            document.getElementById("campName").value = obj.campName;
+            document.getElementById("roomName").value = obj.roomName;
+            document.getElementById("checkIn").value = obj.checkIn;
+            document.getElementById("checkOut").value = obj.checkOut;
+            document.getElementById("price").value = obj.price;
+            document.getElementById("roomId").value = obj.roomId;
+
+        });
+
+
+    </script>
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+    <form action="/saveBooking" class="customerInfo_form" role="form" method="post" th:object="${bookingFormDto}">
+        <input type="hidden" id="roomId" th:field="*{roomId}">
+        <div class="left_contents">
+            <h2>예약자 정보</h2>
+            <div class="l-content">
+                <label>이름</label><br>
+                <input type="text" class="l-c-txtbox" th:field="*{customer}">
+                <p th:if="${#fields.hasErrors('customer')}" th:errors="*{customer}"></p>
+            </div>
+            <div class="l-content">
+                <label>휴대폰 번호</label><br>
+                <input type="text" class="l-c-txtbox" placeholder="' - ' 를 제외하고 입력해주세요." th:field="*{phoneNumber}">
+                <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+            </div>
+            <div class="l-content">
+                <input type="checkbox" class="chk-box" required>숙소이용규칙 및 취소/환불 규정동의<br>
+                <input type="checkbox" class="chk-box" required>개인정보 수집 및 이용 동의<br>
+                <input type="checkbox" class="chk-box" required>개인정보 제 3자 제공 동의
+            </div>
+        </div>
+        <div class="right_contents">
+            <div class="r-content" style="margin-top:0;">
+                <label>캠핑장명</label><br>
+                <input type="text" class="r-c-data" id="campName" th:name="campName" th:field="*{campName}" readonly>
+            </div>
+            <div class="r-content">
+                <label>객실명</label><br>
+                <input type="text" class="r-c-data" id="roomName" th:name="roomName" th:field="*{roomName}" readonly>
+            </div>
+            <div class="r-content">
+                <label>CHECK IN</label><br>
+                <input type="text" class="r-c-data" id="checkIn" th:name="checkIn" th:field="*{checkIn}" readonly>
+            </div>
+            <div class="r-content">
+                <label>CHECK OUT</label><br>
+                <input type="text" class="r-c-data" id="checkOut" th:name="checkOut" th:field="*{checkOut}" readonly>
+            </div>
+            <div class="r-content">
+                <label>총 결제 금액</label><br>
+                <input type="text" class="r-c-data" id="price" th:name="price" th:field="*{price}" readonly><span>원</span>
+            </div>
+            <hr>
+            <button type="submit" class="r-c-btn">결제하기</button>
+        </div>
+
+        <!-- dto 로 넘기는 값 -->
+        <input type="hidden" th:field="*{customer}">
+        <input type="hidden" th:field="*{phoneNumber}">
+
+    </form>
+</section>
+</body>
+</html>

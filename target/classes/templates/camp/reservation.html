@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 예약내역</title>
+    <link rel="stylesheet" href="css/list_1.css">
+    <script src="/js/chkCampRoom.js"></script>
+
+</head>
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        function page(page){
+            location.href="/admin/items/" + page;
+        }
+    </script>
+</th:block>
+<body>
+<section layout:fragment="content" class="page_form">
+    <form th:action="@{'/reservation/'+${bookings.number}}" role="form" method="get" th:object="${bookings}">
+        <div class="list_page_form">
+            <div class="page_title">
+                <h2>예약 내역</h2>
+            </div>
+            <div class="search-content">
+
+            </div>
+            <div class="list_table">
+                <table>
+                    <tr>
+                        <th>객실 이름</th>
+                        <th>체크 인</th>
+                        <th>체크 아웃</th>
+                        <th>예약자</th>
+                        <th>연락처</th>
+                        <th>예약 상태</th>
+                    </tr>
+                    <tr th:each="booking, status : ${bookings.getContent()}">
+                        <td th:text="${booking.roomName}"></td>
+                        <td th:text="${booking.checkIn}"></td>
+                        <td th:text="${booking.checkOut}"></td>
+                        <td th:text="${booking.customer}"></td>
+                        <td th:text="${booking.phoneNumber}"></td>
+                        <td th:if="${booking.getBStatus().toString().equals('bComplete')}"><label class="b_status complete">예약완료</label></td>
+                        <td th:if="${booking.getBStatus().toString().equals('bCancel')}"><label class="b_status cancel">예약취소</label></td>
+                        <td th:if="${booking.getBStatus().toString().equals('bUseEnd')}"><label class="b_status end">이용완료</label></td>
+                    </tr>
+                </table>
+            </div>
+            <div th:with="start=${(bookings.number/maxPage)*maxPage +1},
+        end=(${(bookings.totalPages == 0) ? 1 : (start + (maxPage-1) < bookings.totalPages ? start + (maxPage - 1) : bookings.totalPages)})">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${bookings.first}?'disabled'">
+                        <a th:onclick="'javascript:page('+${bookings.number - 1} + ')'" aria-label='Previous' class="page-link">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}" th:classappend="${bookings.number eq page-1}?'active':''">
+                        <a th:onclick="'javascript:page('+${page -1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                    </li>
+                    <li class="page-item" th:classappend="${bookings.last}?'disabled'">
+                        <a th:onclick="'javascript:page(' + ${bookings.number + 1} + ')'" aria-label="Next" class="page-link">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>

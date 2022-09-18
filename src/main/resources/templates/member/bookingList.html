@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>AMOR CAMP - 내 예약 확인</title>
+    <link rel="stylesheet" href="css/list_2.css">
+    <link rel="stylesheet" href="/css/miniButton.css">
+
+    <style>
+        #campName{
+            padding-left: 20px;
+            font-size: 20px;
+        }
+        #roomName{
+            padding-left: 20px;
+            font-size: 30px;
+            vertical-align: top;
+        }
+        #checkInOutDate{
+            padding-left: 20px;
+        }
+    </style>
+    <script>
+        function deleteBooking(obj){
+            var bookingId = $(obj).parent().children("#bookingId").val()
+            location.href="/changeBooking/"+bookingId;
+            alert("예약이 취소 되었습니다.")
+        }
+
+        function openPopUp(obj) {
+
+            // 빈창 팝업 생성
+            var url = "/popUpReview";
+            var windowTargetName = "targetName";
+            var feature = "scrollbars=yes,width=600,height=800, location=no, resizable=no";
+
+            // localStorage 로 데이터 전송
+            var parameter = {
+                bookingId: $(obj).parent().children("#bookingId").val(),
+                campId: $(obj).parent().children("#campId").val(),
+                campName: $(obj).parent().parent().parent().children("tr").children("#campName").text(),
+                roomName: $(obj).parent().parent().parent().children("tr").children("#roomName").text(),
+                checkInOutDate: $(obj).parent().parent().children("td").children("#checkInOutDate").text(),
+                imgUrl: $(obj).parent().children("#imgUrl").val()
+            }
+            // localStorage 에 저장
+            var reviewItems = JSON.stringify(parameter);
+            localStorage.setItem("reviewItems",reviewItems);
+
+            // 팝업창 열기
+            window.open(url, windowTargetName, feature);
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content" class="page_form">
+    <div class="search_form">
+
+
+        <div class="right_contents">
+            <div class="content_head">
+                <h3 style="padding-left: 20px;">내 예약 목록</h3>
+            </div>
+            <div class="r_content">
+
+                <th:block th:each="booking, status: ${bookingList}">
+                    <table class="roomTable">
+                        <tr>
+                            <td rowspan="4" class="td_img">
+                                <img id="roomImg" th:src="${booking.imgUrl}">
+                            </td>
+                            <td id="campName" class="content_item">[[${booking.campName}]]</td>
+                            <td rowspan="2" class="content_item td_price">
+                                1박 <span>[[${booking.roomPrice}]]</span> 원
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td id="roomName" class="content_item">[[${booking.roomName}]]</td>
+                        </tr>
+                        <tr>
+                            <td class="content_item" style="padding-left: 20px;">
+                                <label>#[[${booking.campType}]]</label>
+                                <label>#[[${booking.campArea}]]</label>
+                                <label>#[[${booking.surroundings}]]</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label id="checkInOutDate" class="content_item">[[${booking.checkIn}]] ~ [[${booking.checkOut}]]</label>
+                            </td>
+                            <td style="padding-bottom: 15px">
+                                <input id="campId" type="hidden" th:value="${booking.campId}">
+                                <input id="bookingId" type="hidden" th:value="${booking.id}">
+                                <input id="imgUrl" type="hidden" th:value="${booking.imgUrl}">
+                                <input id="roomId" type="hidden" th:value="${booking.roomId}">
+
+                                <button th:if="${booking.getBStatus().toString().equals('bComplete')}"
+                                        class="btn-style" type="submit" onclick="deleteBooking(this)">예약취소</button>
+                                <button th:if="${booking.getBStatus().toString().equals('bCancel')}"
+                                        class="disabled-btn" disabled>취소완료</button>
+                                <button th:if="${booking.getBStatus().toString().equals('bUseEnd')}"
+                                        class="disabled-btn" disabled >이용완료</button>
+
+                                <button th:if="${!booking.getBStatus().toString().equals('bCancel')}"
+                                        class="btn-style" type="submit" onclick="openPopUp(this)">이용후기</button>
+                                <button th:if="${booking.getBStatus().toString().equals('bCancel')}"
+                                        class="disabled-btn" disabled>이용후기</button>
+<!--                                <button th:if="${booking.getBStatus().toString().equals('bUseEnd')}"-->
+<!--                                        class="btn-style" type="submit" onclick="openPopUp(this)">이용후기</button>-->
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                </th:block>
+
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

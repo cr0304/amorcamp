@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Camper_complete" />
+        <module name="Camper_Stark" />
+        <module name="Camper_I'am Groot" />
+        <module name="camper" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Camper_I'am Groot" options="-parameters" />
+      <module name="Camper_Stark" options="-parameters" />
+      <module name="Camper_complete" options="-parameters" />
+      <module name="camper" options="-parameters" />
+    </option>
+  </component>
+</project>

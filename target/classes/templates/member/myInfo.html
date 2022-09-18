@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>AMOR CAMP - 내 정보</title>
+
+    <link rel="stylesheet" href="css/loginstyle.css">
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <th:block th:fragment="script">
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+            });
+
+            function onblur_pwCheck() {
+                if ($("#userPw1").val() !== "" && $("#userPw2").val() !== "") {
+                    if ($("#userPw1").val() !== $("#userPw2").val()) {
+                        alert("패스워드가 일치하지 않습니다.");
+                        document.getElementById('userPw1').value = "";
+                        document.getElementById('userPw2').value = "";
+                        document.getElementById('same').innerHTML = "비밀번호가 일치하지 않습니다.";
+                        document.getElementById('same').style.color = 'red';
+                        return false;
+                    } else {
+                        document.getElementById('same').innerHTML = "비밀번호가 일치합니다.";
+                        document.getElementById('same').style.color = 'blue';
+                    }
+                }
+            }
+
+
+        </script>
+    </th:block>
+    <style>
+        /* 헤더 투명 */
+        .header{
+            background: transparent !important;
+        }
+        /*헤더 밑줄 제거*/
+        .navbar{
+            border-bottom: none !important;
+        }
+        body{
+            background-image: url('images/main/bg/bg_myInfo.jpg');
+            height: 1000px;
+        }
+
+        .ch-member{
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            margin: 10px;
+        }
+        .ch-member div label{
+            margin: 0 10px 0 0;
+
+        .form-control[readonly]{
+            background-color: rgba(255, 255, 255, 0.06) !important;
+        }
+
+    </style>
+</head>
+<body layout:fragment="content" class="img js-fullheight">
+<section class="ftco-section" style="height: 950px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="login-wrap p-0">
+                    <div class="page-title">
+                        <h3>내 정보</h3>
+                    </div>
+                    <form role="form" method="post" th:object="${memberFormDto}" class="signin-form">
+                        <div class="form-group">
+                            <input type="text"th:field="*{email}" class="form-control" placeholder="이메일" readonly>
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect date</p>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" th:field="*{name}" class="form-control" placeholder="이름" readonly>
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect date</p>
+                        </div>
+                        <div class="form-group">
+                            <input  th:field="*{password}" id="userPw1" type="password" class="form-control"  placeholder="새비밀번호 입력">
+                        </div>
+                        <div class="form-group">
+                            <input id="userPw2" type="password" class="form-control" placeholder="비밀번호 확인" onblur="onblur_pwCheck()" required>
+                            <span id="same"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="전화번호">
+                            <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="fieldError">Incorrect date</p>
+                        </div>
+                        <button type="submit" class="form-control btn btn-primary submit px-3">수정하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
